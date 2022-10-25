@@ -2,11 +2,10 @@
 
 class Program
 {
+    public static Config Config;
     public static void Main(string[] args)
     {
-        for (int i = 0; i < 9; i++)
-        {
-            //Console.WriteLine(AlikScraper.RandomJoke());
-        }
+        Config = new Config("config.json");
+        
     }
 }
