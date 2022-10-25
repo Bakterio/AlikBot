@@ -1,6 +1,6 @@
 using HtmlAgilityPack;
 
-namespace Alik;
+namespace AlikBot;
 
 public class AlikScraper
 {

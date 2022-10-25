@@ -1,11 +1,11 @@
-using System.Text.Json.Nodes;
 using Newtonsoft.Json;
 
-namespace Alik;
+namespace AlikBot;
 
 public class Config
 {
     private StreamReader _file;
+    public dynamic Data;
 
     public Config(string path)
     {
@@ -16,6 +16,7 @@ public class Config
         }
 
         _file = File.OpenText(path);
+        Data = JsonConvert.DeserializeObject(_file.ReadToEnd())!;
     }
     
     public string Text => _file.ReadToEnd();
