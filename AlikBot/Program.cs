@@ -27,14 +27,26 @@ class Program
         return Task.CompletedTask;
     }
 
-    private static async Task CreateSlashCommands()
+    private static void CreateSlashCommands()
     {
-        var cmd = new SlashCommandBuilder();
-        cmd.Name = "vtip";
-        cmd.Description = "Hahaha, velice vtipné";
+        _client.Ready += async () =>
+        {
+            var cmd = new SlashCommandBuilder();
+            cmd.Name = "vtip";
+            cmd.Description = "Hahaha, velice vtipné";
 
-        await _client.Guilds.First().CreateApplicationCommandAsync(cmd.Build());
-        Console.WriteLine("Command uploaded");
+            //await _client.Guilds.First().CreateApplicationCommandAsync(cmd.Build());
+            await _client.CreateGlobalApplicationCommandAsync(cmd.Build());
+            Console.WriteLine("Command uploaded");
+        };
+    }
+
+    private static void DestroyGuildSlashCommand()
+    {
+        _client.Ready += async () =>
+        {
+            await _client.Guilds.First().DeleteApplicationCommandsAsync();
+        };
     }
 
     private static async Task VtipCommandHandler(SocketSlashCommand cmd)
