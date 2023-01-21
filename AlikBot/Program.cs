@@ -1,6 +1,4 @@
-﻿
-using System.Reflection.Emit;
-using Discord;
+﻿using Discord;
 using Discord.WebSocket;
 
 namespace AlikBot;
