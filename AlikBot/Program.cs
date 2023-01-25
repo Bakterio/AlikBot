@@ -13,7 +13,9 @@ class Program
         Config = new Config("config.json");
         _client = new DiscordSocketClient();
         _client.Log += Log;
+        //CreateSlashCommands();
         _client.SlashCommandExecuted += VtipCommandHandler;
+        _client.SlashCommandExecuted += MamaCommandHandler;
         await _client.LoginAsync(TokenType.Bot, Config.Data.token.ToString());
         await _client.StartAsync();
         await Task.Delay(-1); // block method
@@ -29,13 +31,18 @@ class Program
     {
         _client.Ready += async () =>
         {
-            var cmd = new SlashCommandBuilder();
-            cmd.Name = "vtip";
-            cmd.Description = "Hahaha, velice vtipné";
+            var vtip = new SlashCommandBuilder();
+            vtip.Name = "vtip";
+            vtip.Description = "Hahaha, velice vtipné";
 
-            //await _client.Guilds.First().CreateApplicationCommandAsync(cmd.Build());
-            await _client.CreateGlobalApplicationCommandAsync(cmd.Build());
-            Console.WriteLine("Command uploaded");
+            await _client.CreateGlobalApplicationCommandAsync(vtip.Build());
+            
+            var mama = new SlashCommandBuilder();
+            mama.Name = "tvoje_mama";
+            mama.Description = "Tvoje máma, je tak...";
+
+            await _client.CreateGlobalApplicationCommandAsync(mama.Build());
+            Console.WriteLine("Commands uploaded");
         };
     }
 
@@ -59,7 +66,24 @@ class Program
             Footer = new EmbedFooterBuilder().WithText("Made by Bakterio")
         };
         
-        emb.AddField(":rofl: :rofl: :rofl:", AlikScraper.RandomJoke());
+        emb.AddField(":rofl: :rofl: :rofl:", Scraper.AlikJoke());
+
+        await cmd.RespondAsync(embed: emb.Build());
+    }
+    
+    private static async Task MamaCommandHandler(SocketSlashCommand cmd)
+    {
+        if (cmd.Data.Name != "tvoje_mama") { return; }
+
+        var emb = new EmbedBuilder()
+        {
+            Title = "Jedovatý vtípek o TVOJÍ MÁMĚ :index_pointing_at_the_viewer:",
+            Url = "https://www.vtipy.club/tvoje_mama",
+            Color = Color.Blue,
+            Footer = new EmbedFooterBuilder().WithText("Made by Bakterio")
+        };
+        
+        emb.AddField(":rofl: :rofl: :rofl:", Scraper.TvojeMamaJoke());
 
         await cmd.RespondAsync(embed: emb.Build());
     }
